@@ -37,6 +37,7 @@ public class LoginModule {
 			
 			if("123456".equals(password) && null != stu){
 				session.setAttribute("username", stu.getName());
+				session.setAttribute("uid", stu.getId());
 				session.setAttribute("level", 5);
 				result.setOk(true).setMsg("登陆成功");
 				
@@ -45,6 +46,7 @@ public class LoginModule {
 			
 		}else if ((user.getPassword()).equals(password)) {
 			session.setAttribute("username", username);
+			session.setAttribute("uid", user.getId());
 			session.setAttribute("level", user.getLevel());
 			result.setOk(true).setMsg("登陆成功");
 		} else {

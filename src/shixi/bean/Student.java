@@ -1,8 +1,11 @@
 package shixi.bean;
 
+import java.util.List;
+
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Default;
 import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.ManyMany;
 import org.nutz.dao.entity.annotation.Table;
 //学生表
 @Table("t_stu")
@@ -31,6 +34,17 @@ public class Student {
 	
 	@Column
 	private Integer enterYear;//入学年份 
+	
+	@ManyMany(target=Subject.class,relation="t_course_selecting" ,from="student_id",to="subject_id")
+	private List<Subject> subjects;
+
+	public List<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
+	}
 
 	public Integer getId() {
 		return id;

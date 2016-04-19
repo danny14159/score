@@ -21,6 +21,32 @@ public class Subject {
 	
 	@ManyMany(target=Test.class,relation="t_test_subject",from="subject_id",to="test_id")
 	private List<Test> tests;
+	
+	@Column
+	private String during;
+	
+	@Column
+	private int teacher_id;
+
+	public int getTeacher_id() {
+		return teacher_id;
+	}
+
+
+	public void setTeacher_id(int teacher_id) {
+		this.teacher_id = teacher_id;
+	}
+
+
+	public String getDuring() {
+		return during;
+	}
+
+
+	public void setDuring(String during) {
+		this.during = during;
+	}
+
 
 	public List<Test> getTests() {
 		return tests;

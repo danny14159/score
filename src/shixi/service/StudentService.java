@@ -11,6 +11,7 @@ import java.util.List;
 import org.nutz.dao.QueryResult;
 
 import shixi.bean.Student;
+import shixi.bean.Subject;
 
 /**
  * 学生接口（学生信息的增删改查）
@@ -64,4 +65,12 @@ public interface StudentService {
 	public void updateStudent(Student student);
 	
 	public Student loadById(String id);
+	
+	public int selectCourse(int studentId,int courseId);
+	
+	/**查看所选课程
+	 * @param studentId
+	 * @return
+	 */
+	public List<Subject> listCourses(int studentId);
 }

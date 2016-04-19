@@ -11,10 +11,9 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.service.IdEntityService;
-import org.nutz.trans.Atom;
 
-import shixi.bean.ScoreStat;
 import shixi.bean.Student;
+import shixi.bean.Subject;
 
 @IocBean(fields = { "dao" })
 public class StudentDao extends IdEntityService<Student> {
@@ -159,5 +158,24 @@ public class StudentDao extends IdEntityService<Student> {
 	 */
 	public List<Student> queryall(){
 		return dao().query(Student.class, null);
+	}
+	
+	public int selectCourse(int studentId, int courseId){
+		Sql sql = Sqls.create("insert into tb_course_selecting values(@sid,@cid)");
+		sql.params().set("sid", studentId);
+		sql.params().set("cid", courseId);
+		dao().execute(sql);
+		
+		return 1;
+	}
+	
+	/**查学生所有的课程
+	 * @param stuId
+	 * @return
+	 */
+	public List<Subject> listCourses(int stuId){
+		Student s = (Student) queryById(stuId);
+		
+		return dao().fetchLinks(s, "subjects").getSubjects();
 	}
 }

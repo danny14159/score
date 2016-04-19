@@ -2,6 +2,9 @@ package shixi.module;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.nutz.dao.QueryResult;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -58,4 +61,30 @@ public class StudentModule {
 				pageSize);
 	}
 
+	/**学生选课
+	 * @param sid
+	 * @param cid
+	 * @return
+	 */
+	@At("/selCourse")
+	@Ok("json")
+	public Object selCourse(
+			@Param("sid")Integer sid,
+			@Param("cid")Integer cid
+			){
+		
+		return studentServiceImpl.selectCourse(sid, cid);
+	}
+	
+	/**
+	 * @return
+	 */
+	@At("/listCourses")
+	@Ok("jsp:listCourses")
+	public void listCourses(HttpSession session,HttpServletRequest request){
+		
+		int uid = (int) session.getAttribute("uid");
+		
+		request.setAttribute("courses", studentServiceImpl.listCourses(uid));
+	}
 }

@@ -8,6 +8,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import shixi.bean.Student;
+import shixi.bean.Subject;
 import shixi.dao.StudentDao;
 import shixi.service.BaseService;
 import shixi.service.StudentService;
@@ -68,5 +69,15 @@ public class StudentServiceImpl extends BaseService<Student> implements StudentS
 	@Override
 	public Student loadById(String id) {
 		return studentDao.fetch(Cnd.where("id", "=", id));
+	}
+
+	@Override
+	public int selectCourse(int studentId, int courseId) {
+		return studentDao.selectCourse(studentId, courseId);
+	}
+
+	@Override
+	public List<Subject> listCourses(int studentId) {
+		return studentDao.listCourses(studentId);
 	}
 }
