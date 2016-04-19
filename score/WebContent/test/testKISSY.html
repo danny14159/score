@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--<script src="//g.alicdn.com/kissy/k/1.4.7/seed.js" data-config="{combine:true}"></script>-->
+<title>TEST KISSY</title>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="utils.js"  charset="utf-8"></script>
+<script type="text/javascript">
+var local=12;
+(function b(){
+	console.log(this);
+local1=12;
+function a(f){
+	local1=254;
+	console.log(this);
+	f.call(this);
+}
+a(function(){
+	alert(local1 +" "+ local1);
+	console.log(this);
+	local1=-1;
+});
+})();
+alert(local1);
+
+function f(){
+	this.a=1;
+	console.log(this);
+}
+var o=new f();
+</script>
+</html>

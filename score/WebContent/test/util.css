@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+/**======styles for TabView=========*/
+
+.TabView{
+	position: relative;
+}
+.TabView ul.tabs{
+	float:left;
+	border-radius:2px; 
+	padding:0;
+	margin:0;
+}
+.TabView ul.tabs li{
+	list-style: none;
+	background: #fff;
+	
+}
+.TabView ul.tabs li a{
+	border-bottom:1px solid #a5b6c7;
+	display: block;
+	padding:5px 20px;
+}
+.TabView ul.tabs li a.active{
+	
+	background: #7d93a8 !important;
+	color:#fff;
+}
+.TabView ul.tabs li a:hover{
+	cursor:pointer;
+	background: #eee;
+	text-decoration: none;
+}
+.TabView div.content{
+	position:absolute;
+	top:0;
+	left:0;
+	border:0px solid #b7c7d6;
+	min-height:100px;
+	margin:0;
+}
+
+/*==end style for TabView===*/

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DataTable Test</title>
+<link href="resources/datatable/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<table id="tb" border="1">
+	<tr>
+		<th>ID</th><th>姓名</th><th>所在班级</th><th>性别</th>
+	</tr>
+	<tr>
+		<td>I1<p>段落</p></td><td></td><td>初一二班</td><td>男</td>
+	</tr>
+	<tr>
+		<td>I1</td><td>名字1</td><td>初一二班</td><td>男</td>
+	</tr>
+</table>
+<button onclick="on_edit();">编辑表格</button>
+<button onclick="f();">加载表格</button>
+<button onclick="on_add();">添加记录</button>
+</body>
+<script src="resources/jquery-2.1.0.min.js"></script>
+<script src="resources/datatable/jquery.dataTables.min.js"></script>
+<script src="resources/js/utils.js"></script>
+
+</html>

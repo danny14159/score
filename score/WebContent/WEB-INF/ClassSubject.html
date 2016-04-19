@@ -1,0 +1,232 @@
+<!-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%> -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<title>班级管理</title>
+<style type="text/css">
+body{
+	font-family:'微软雅黑';
+}
+th{
+	text-align:center;
+}
+table{
+	margin-top:20px;
+}
+.nav{
+	height:90px;
+	line-height:90px;
+}
+.menu{
+	background-color:#eee;
+	border:1px solid #aaa;
+	height:600px;
+	border-radius:4px;
+}
+
+.list-group{
+	margin-left:-15px;
+	margin-right:-15px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="nav">成绩管理系统version:1.0<a href="welcome.html">欢迎页面</a></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-3 col-md-2 menu">
+          
+          <div class="list-group">
+			 <a  class="list-group-item active">班级管理</a>
+			  <a href="subject/" class="list-group-item ">学科管理</a>
+			  <a href="student/" class="list-group-item ">学生管理</a>
+			  <a href="test/" class="list-group-item ">考试管理</a>
+			  <a href="score/" class="list-group-item">成绩管理</a>
+			</div>
+          </div>
+	
+		<div class="col-md-10">
+			
+			
+			
+	<!-- 		<button class="btn btn-success" onclick="on_add();"><span class="glyphicon glyphicon-plus"></span>添加新成绩...</button> -->
+				<div class="panel panel-success" style="min-height:600px;">
+							<div class="panel-heading">
+								<h3 class="panel-title">班级管理&gt;&gt;班级课程管理
+			</h3>
+							</div>
+							<div class="panel-body">
+			
+			当前班级
+			年级：
+			<select>
+				<option>初一</option>
+				<option>初二</option>
+				<option>初三</option>
+			</select>班级：
+			<select>
+				<option>1班</option>
+				<option>2班</option>
+			</select>
+							
+						<button class="btn btn-success" onclick="on_add(this);">添加课程</button>
+					
+			<table class="table table-condensed table-striped table-hover table-bordered" id="tbmain">
+				<thead>
+				<tr>					
+					<th width="16%">班级课程ID</th>
+					<th width="16%">课程名称</th>
+					<th width="15%">选项</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>10</td><td>数学</td>				
+					<td>
+						<div class="btn-group">
+						  <button type="button" class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown">
+						     <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu" role="menu">
+						 	 <li><a  onclick="on_modify( this);">修改</a></li>
+						    <li class="divider"></li>
+						     <li><a   onclick="on_del( 1 );"><span class="glyphicon glyphicon-remove"></span>删除</a></li>
+						  </ul>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			
+
+					
+					</div>
+				</div>
+		</div>
+	</div>
+	
+</div>
+
+
+</body>
+<script type="text/javascript" src="resources/jquery-2.1.0.min.js"></script>
+<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="resources/js/utils.js"></script>
+<script src="resources/tableExport/tableExport.js"></script>
+<script src="resources/tableExport/jquery.base64.js"></script>
+<script src="resources/ajaxfileupload/ajaxfileupload.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	
+	
+   
+});
+
+
+var ADD_PATH="add";
+var DEL_PATH="delete";
+var UPD_PATH="update";
+var LIST_PATH="listById";
+
+
+
+
+
+var on_del=function(id){
+	delid=id;
+	$("#showid").text(id);
+	$("#modalDel").modal();
+}
+
+var on_modify=function(dom){
+	window.utils.alert('MODIFY',"SUCCESS");
+	editTable(
+		$(dom).closest('tr'),
+		{
+			'1':{
+					'prop_name':'subject_id',
+					'inFormat':function(){
+						return "<select><option>历史</option><option>政治</option></select>";
+					},
+					'outFormat':function($td){
+						return $td.children('select').val();
+					}
+				},
+		},
+		function(post_json){
+			showProp(post_json);
+		}
+	)
+}
+var on_add=function(dom){
+	window.utils.alert('ADD');
+	insertRecord(
+		$('#tbmain'),
+		{
+			'1':{
+				'prop_name':'subject_id',
+				'inFormat':function(){
+					return "<select><option>历史</option><option>政治</option></select>";
+				},
+				'outFormat':function($td){
+					return $td.children('select').val();
+				}
+			},
+		},
+		function(post_json){
+			showProp(post_json);
+		}
+	);
+	return;
+	//另起一行添加信息
+	var tr="<tr>";
+	for(var i=0;i<9;i++){
+		tr+='<td>';
+		if(i!=0){
+			if(i==1 || i==2) tr+='<input type=text size=9/>';
+			else tr+='<input type=text size=3/>';
+		}
+		tr+="</td>"
+	}
+	var tdhtml = "<button class='btn btn-primary btn-xs' onclick='on_save(this);'><span class='glyphicon glyphicon-ok'></span>save</button>"
+		+ "<button class='btn btn-danger btn-xs' onclick='on_cancel(this);'><span class='glyphicon glyphicon-remove'></span>cancel</button>";
+	tr+='<td colspan="3">'+tdhtml+'</td></tr>';
+	$("#tbmain tr:last").before(tr);
+}
+
+
+var list=function(){
+	
+	$.post(LIST_PATH,{},function(data){
+		data=JSON.parse(data);
+		
+		var html="";
+		var data=[{'test_id':'1','class_id':'1','student_name':'名字'}];
+		var data_field_name=['test_id','class_id','student_name','chinese_score','math_score','english_score','politics_score','history_score','total_score','class_order','school_order'];
+		for(var p in data){
+			var data_field=[];
+			for(var field_name in data_field_name){
+				data_field.push(data[p][data_field_name[field_name]]);
+			}
+			html+='<tr><td>'+data_field.join('</td><td>')+'</td>';
+			
+			html+="<td><div class=\"btn-group\">"+
+			 ' <button type="button" class="btn btn-xs btn-link dropdown-toggle" data-toggle="dropdown">'+
+		     '<span class="caret"></span> </button><ul class="dropdown-menu" role="menu"> <li><a  onclick="on_modify( '+data[p].id+' );">修改</a></li>'+
+		    ' <li class="divider"></li><li><a   onclick="on_del( '+data[p].id+' );"><span class="glyphicon glyphicon-remove"></span>删除</a></li> </ul></div></td>';
+			html+='</tr>';
+		}
+		$("#tbmain tr:gt(0)").remove();
+		$("#tbmain").append(html);
+	})
+}
+list();
+
+</script>
+</html>

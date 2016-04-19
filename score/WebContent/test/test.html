@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="util.css" rel="stylesheet" media="screen">
+<title>TEST</title>
+<style type="text/css">
+
+a.tooltip{
+	position: relative;
+}
+a.tooltip span{
+	//display: none;
+}
+a.tooltip span{
+	width:10em;
+	display: block;
+	position: absolute;
+	top:1em;
+	left:2em;
+	padding: 0.2em 0.6em;
+	border:1px solid #996633;
+	background-color: #ff6;
+	color: #000;
+}
+
+#main{
+	width:500px;
+	border:1px solid #eee;
+}
+
+</style>
+<link rel="stylesheet/less" type="text/css" href="styles.less" />
+<script type="text/javascript" src="less-1.7.5.min.js"></script>
+</head>
+<body>
+<div id="main">
+<!-- 	<div class="TabView">
+		<ul class="tabs">
+		<li><a>TAB1</a></li>
+		<li><a>TAB2</a></li>
+		</ul>
+		<div class="content">
+			CONTENT
+		</div>
+		<div class="clear"></div>
+	</div>
+	 -->
+</div>
+<h2>Title</h2>
+
+</body>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="utils.js"  charset="utf-8"></script>
+
+<script type="text/javascript">
+
+
+var view = new TabView();
+view.add({
+	title:'biaoti1',
+	content:'CONTENT1'
+});
+view.add({
+	title:'biaoti2',
+	content:'CONTENT2'
+});
+view.element($('#main')).prependTo($('#main'));
+
+view.resize();
+</script>
+</html>

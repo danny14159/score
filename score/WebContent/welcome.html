@@ -1,0 +1,66 @@
+﻿<!--<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="resources/bgstretcher/bgstretcher.css" rel="stylesheet" media="screen">
+<title>欢迎访问【成绩管理系统】</title>
+<style type="text/css">
+.main{
+	font-family:'微软雅黑';
+	margin-top:100px;
+	opacity:0.9;
+	padding-left:50px;
+}
+</style>
+</head>
+<body>
+<div class="jumbotron main">
+	<div class="row">
+		<div class="col-md-4">
+		  <h1>Welcome!</h1>
+	  </div>
+	  <div class="col-md-2" style="margin:0 -45px 0 45px;">
+	  	<h2>CLASS</h2>
+	  	<p><a class="btn btn-primary btn-lg" role="button" href="class/">班级管理</a></p>
+	  </div>
+	  <div class="col-md-2">
+	  <br/><br/>
+	  	<h2>STUDENT</h2>
+	  	
+	  	<p><a class="btn btn-success btn-lg" role="button" href="student/">学生管理</a></p>
+	  </div>
+	  <div class="col-md-2">
+	  	<h2>COURSE</h2>
+	  	<p><a class="btn btn-info btn-lg" role="button" href="test/">课程管理</a></p>
+	  </div>
+	  <div class="col-md-2">
+	  <br/><br/>
+	  	<h2>SCORE</h2>
+	  	<p><a class="btn btn-danger btn-lg" role="button" href="score/">选课管理</a></p>
+	  </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="resources/jquery-2.1.0.min.js"></script>
+<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="resources/bgstretcher/bgstretcher.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var img_path=[];
+	for(var i=0;i<6;i++){
+		img_path.push('resources/bgimg/sample-'+(i+1)+'.jpg');
+	}
+  $('body').bgStretcher({
+    images: img_path,
+    imageWidth: 1024, 
+	imageHeight: 768, 
+	
+
+    });
+});
+</script>
+</html>
