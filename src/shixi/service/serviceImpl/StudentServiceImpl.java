@@ -10,6 +10,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import shixi.bean.Student;
 import shixi.bean.Subject;
 import shixi.dao.StudentDao;
+import shixi.dao.UserDao;
 import shixi.service.BaseService;
 import shixi.service.StudentService;
 
@@ -18,6 +19,9 @@ public class StudentServiceImpl extends BaseService<Student> implements StudentS
 
 	@Inject
 	private StudentDao studentDao;
+	
+	@Inject
+	private UserDao userDao;
 
 	@Override
 	public void add(Student stu) {
@@ -51,7 +55,7 @@ public class StudentServiceImpl extends BaseService<Student> implements StudentS
 
 	}
 
-	public List<Student> query(Integer stu_id, Integer at_class) {
+/*	public List<Student> query(Integer stu_id, Integer at_class) {
 		if (stu_id != null && at_class == null) {
 			return studentDao.queryById(stu_id);
 		} else if (at_class != null && stu_id == null) {
@@ -60,7 +64,7 @@ public class StudentServiceImpl extends BaseService<Student> implements StudentS
 			return null;
 		}
 	}
-
+*/
 	@Override
 	public void updateStudent(Student student){
 		studentDao.update(student);
@@ -78,6 +82,16 @@ public class StudentServiceImpl extends BaseService<Student> implements StudentS
 
 	@Override
 	public List<Subject> listCourses(int studentId) {
-		return studentDao.listCourses(studentId);
+		List<Subject> list =  studentDao.listCourses(studentId);
+		
+		for(Subject item:list){
+			item.setTeacher_name(userDao.queryById(item.getTeacher_id()).getUsername());
+		}
+		return list;
+	}
+
+	@Override
+	public int deSelectCourse(int studentId, int courseId) {
+		return studentDao.deSelectCourse(studentId, courseId);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.service.IdEntityService;
 
@@ -12,6 +13,9 @@ import shixi.bean.Subject;
 
 @IocBean(fields = { "dao" })
 public class SubjectDao extends IdEntityService<Subject> {
+	
+	@Inject
+	private UserDao userDao;
 	/**
 	 * 
 	 * 增加科目信息
@@ -66,7 +70,11 @@ public class SubjectDao extends IdEntityService<Subject> {
 	 * @return 所有科目信息
 	 */
 	public List<Subject> query() {
-		return dao().query(Subject.class, null);
+		List<Subject> list =  dao().query(Subject.class, null);
+		for(Subject item:list){
+			item.setTeacher_name(userDao.queryById(item.getTeacher_id()).getUsername());
+		}
+		return list;
 	}
 	/**
 	 * 根据name查询科目id，如果没查到返回0

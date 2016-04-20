@@ -14,7 +14,7 @@
 <base href="<%=basePath%>">
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>网上在线选课系统</title>
+<title>${initParam.projectName }</title>
 <link href="resources/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet" media="screen">
 <link href="resources/util.css" rel="stylesheet" media="screen">
@@ -25,7 +25,7 @@
 	<div id="topNav">
 
 		<div class="title">
-			<a  class="plane">网上在线选课系统version 1.0</a>
+			<a  class="plane">${initParam.projectName }version 1.0</a>
 		</div>
 
 		<div id="loginInfo">
@@ -42,15 +42,20 @@
 
 				<ul id="menu">
 					<c:if test="${level eq 1 }">
-						<li class="menuItem"><span data-index="0">班级管理</span></li>
-						<li class="menuItem"><span data-index="1">课程管理</span></li>
-						<li class="menuItem"><span data-index="2">学生管理</span></li>
+						<li class="menuItem"><span data-index="0" data-url="class">班级管理</span></li>
+						<li class="menuItem"><span data-index="1" data-url="subject">课程管理</span></li>
+						<li class="menuItem"><span data-index="2" data-url="student">学生管理</span></li>
+					</c:if>
+					<c:if test="${level eq 4 }">
+						<li class="menuItem"><span data-index="1" data-url="subject/mine">我的课程</span></li>
+						<li class="menuItem"><span data-index="2" data-url="student">学生管理</span></li>
 					</c:if>
 					<c:if test="${level eq 5 }">
-						<li class="menuItem"><span data-index="3">选课管理</span></li>
+						<li class="menuItem"><span data-index="1" data-url="subject">开设课程</span></li>
+						<li class="menuItem"><span data-index="1" data-url="student/listCourses">我的课程</span></li>
 					</c:if>
-					<!-- <li class="menuItem"><span data-index="2">学生管理</span></li> -->
-					<!-- <li class="menuItem"><span data-index="3">考试管理</span></li> -->
+					<!-- <li class="menuItem"><span data-index="2" data-url="student">学生管理</span></li> -->
+					<!-- <li class="menuItem"><span data-index="3" data-url="test">考试管理</span></li> -->
 					<!-- <li class="menuItem">
 						<span data-index="4">成绩管理</span>
 						<ul style="display: none">
@@ -60,7 +65,7 @@
 						</ul>
 					</li> -->
 					<c:if test="${level eq 1 }">
-						<li class="menuItem"><span data-index="5">用户管理</span></li>
+						<li class="menuItem"><span data-index="5" data-url="user">用户管理</span></li>
 					</c:if>
 				</ul>
 				
@@ -77,7 +82,7 @@
 					个班，共<span id="nStudent">
 						
 					</span>名学生
-					<div class="content" style="width:67%;margin-left:0;height:210px;">
+					<div class="content" style="width:67%;margin-left:0;height:210px;display: none;">
 						<div class="contentTitle">快捷入口</div>
 						<div class="contentBody">
 							<div class="entry prompt_text">
@@ -151,8 +156,8 @@
 					<div>
 						<label>身份：</label>
 						<select name="level">
-							<option value="3">年级主任</option>
-							<option value="4">普通教师</option>
+<!-- 							<option value="3">年级主任</option>
+ -->							<option value="4">普通教师</option>
 						</select>
 					</div>
 					<button class="btn btn-primary" onclick="submit_user();">提交</button>
@@ -206,6 +211,7 @@
 				function() {
 					var self=$(this);
 					var index=self.attr('data-index');
+					var url=self.attr('data-url');
 					if(index == 4){
 						//toggle self.next('ul')
 						$(self.next('ul').slideToggle(300));
@@ -214,8 +220,8 @@
 					$('#menu').find('span').removeClass("active");
 					$('#menu>li>ul>li').removeClass('active');
 					self.addClass("active");
-					var urls = [ 'class', 'subject', 'student', 'test', , 'user' ];
-					loadPage(urls[index] + "/", 'ajaxData');
+					//var urls = [ 'class', 'subject', 'student', 'test', , 'user' ];
+					loadPage(url + "/", 'ajaxData');
 				}
 		);
 		$('#menu>li>ul>li').click(function(){

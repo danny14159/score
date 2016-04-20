@@ -68,6 +68,14 @@ public interface StudentService {
 	
 	public int selectCourse(int studentId,int courseId);
 	
+	/**取消选择
+	 * @param studentId
+	 * @param courseId
+	 * @return
+	 */
+	public int deSelectCourse(int studentId,int courseId);
+	
+	
 	/**查看所选课程
 	 * @param studentId
 	 * @return

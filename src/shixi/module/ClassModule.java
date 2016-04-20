@@ -54,7 +54,7 @@ public class ClassModule {
 	public List<Class> query(Integer grade) {
 		//System.out.println("========"+Json.toJson(classServiceImpl.query(grade)));
 		return classServiceImpl.query(grade);
-
+		
 	}
 
 	@At("/addSubject")

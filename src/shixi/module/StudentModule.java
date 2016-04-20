@@ -23,12 +23,12 @@ public class StudentModule {
 
 	@At("/")
 	@Ok("jsp:Student")
-	public void toStudent() {
+	public void toStudent(HttpServletRequest request) {
 
 	}
 
 	@At("/add")
-	public void add(@Param("..")Student stu) {
+	public void add(@Param("..") Student stu) {
 		studentServiceImpl.add(stu);
 	}
 
@@ -38,53 +38,68 @@ public class StudentModule {
 	}
 
 	@At("/delete")
-	public void delete(@Param("id")int id) {
+	public void delete(@Param("id") int id) {
 		studentServiceImpl.delete(id);
 	}
 
-@At("/update")
-	public void update(@Param("..")Student student) {
+	@At("/update")
+	public void update(@Param("..") Student student) {
 		studentServiceImpl.updateStudent(student);
 	}
-/*	
-	@At("/query")
-	@Ok("json")
-	public List<Student> query(@Param("stu_id")Integer stu_id, @Param("at_class")Integer at_class) {
-		return studentServiceImpl.query(stu_id, at_class);
-	}*/
+	/*
+	 * @At("/query")
+	 * 
+	 * @Ok("json") public List<Student> query(@Param("stu_id")Integer
+	 * stu_id, @Param("at_class")Integer at_class) { return
+	 * studentServiceImpl.query(stu_id, at_class); }
+	 */
 
 	@At("/queryPage")
 	@Ok("json")
-	public QueryResult query(@Param("stu_id")Integer stu_id, @Param("atclass")Integer atclass, @Param("name")String name,
-			@Param("pageNumber")int pageNumber, @Param("pageSize")int pageSize) {
-		return studentServiceImpl.query(stu_id, atclass, name, pageNumber,
-				pageSize);
+	public QueryResult query(@Param("stu_id") Integer stu_id, @Param("atclass") Integer atclass,
+			@Param("name") String name, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize) {
+		return studentServiceImpl.query(stu_id, atclass, name, pageNumber, pageSize);
 	}
 
-	/**学生选课
+	/**
+	 * 学生选课
+	 * 
 	 * @param sid
 	 * @param cid
 	 * @return
 	 */
 	@At("/selCourse")
 	@Ok("json")
-	public Object selCourse(
-			@Param("sid")Integer sid,
-			@Param("cid")Integer cid
-			){
+	public Object selCourse(HttpSession session, @Param("sid") Integer sid, @Param("cid") Integer cid) {
+		int uid = (int) session.getAttribute("uid");
 		
-		return studentServiceImpl.selectCourse(sid, cid);
+		return studentServiceImpl.selectCourse(uid, cid);
 	}
-	
+
+	/**
+	 * 学生取消选课
+	 * 
+	 * @param sid
+	 * @param cid
+	 * @return
+	 */
+	@At("/deSelCourse")
+	@Ok("json")
+	public Object deSelCourse(HttpSession session, @Param("cid") Integer cid) {
+		int uid = (int) session.getAttribute("uid");
+
+		return studentServiceImpl.deSelectCourse(uid, cid);
+	}
+
 	/**
 	 * @return
 	 */
 	@At("/listCourses")
 	@Ok("jsp:listCourses")
-	public void listCourses(HttpSession session,HttpServletRequest request){
-		
+	public void listCourses(HttpSession session, HttpServletRequest request) {
+
 		int uid = (int) session.getAttribute("uid");
-		
+
 		request.setAttribute("courses", studentServiceImpl.listCourses(uid));
 	}
 }

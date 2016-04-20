@@ -2,6 +2,7 @@ package shixi.module;
 
 import java.util.List;
 
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
@@ -9,11 +10,15 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
 import shixi.bean.User;
+import shixi.dao.UserDao;
 import shixi.service.UserService;
 
 @IocBean
 @At("/user")
 public class UserModule {
+	
+	@Inject
+	private UserDao userDao;
 
 	@Inject
 	private UserService userServiceImpl;
@@ -51,6 +56,12 @@ public class UserModule {
 	@Ok("json")
 	public User queryById(int id) {
 		return userServiceImpl.queryById(id);
+	}
+	
+	@At("/queryByLevel")
+	@Ok("json")
+	public List<User> queryByLevel(int level) {
+		return userDao.dao().query(User.class, Cnd.where("level","=",level));
 	}
 
 	@At("/queryByName")

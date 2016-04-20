@@ -1,6 +1,5 @@
 package shixi.module;
 
-import java.util.List;
 import java.util.Map;
 
 import org.nutz.ioc.loader.annotation.Inject;

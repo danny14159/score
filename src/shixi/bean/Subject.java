@@ -27,6 +27,18 @@ public class Subject {
 	
 	@Column
 	private int teacher_id;
+	
+	private String teacher_name;
+
+	public String getTeacher_name() {
+		return teacher_name;
+	}
+
+
+	public void setTeacher_name(String teacher_name) {
+		this.teacher_name = teacher_name;
+	}
+
 
 	public int getTeacher_id() {
 		return teacher_id;

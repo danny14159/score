@@ -79,8 +79,8 @@ public class StudentDao extends IdEntityService<Student> {
 	 * @param id
 	 * @return 对应id的学生信息
 	 */
-	public List<Student> queryById(int id) {
-		return dao().query(Student.class, Cnd.where("id", "=", id));
+	public Student queryById(int id) {
+		return dao().fetch(Student.class, Cnd.where("id", "=", id));
 	}
 
 	/**
@@ -161,7 +161,16 @@ public class StudentDao extends IdEntityService<Student> {
 	}
 	
 	public int selectCourse(int studentId, int courseId){
-		Sql sql = Sqls.create("insert into tb_course_selecting values(@sid,@cid)");
+		Sql sql = Sqls.create("insert into t_course_selecting values(@sid,@cid)");
+		sql.params().set("sid", studentId);
+		sql.params().set("cid", courseId);
+		dao().execute(sql);
+		
+		return 1;
+	}
+	
+	public int deSelectCourse(int studentId, int courseId){
+		Sql sql = Sqls.create("delete from t_course_selecting where student_id=@sid and subject_id=@cid");
 		sql.params().set("sid", studentId);
 		sql.params().set("cid", courseId);
 		dao().execute(sql);

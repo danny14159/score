@@ -101,7 +101,7 @@ public class ScoreAnalysisServiceImpl implements ScoreAnalysisService {
 			Map<String, Object> classTopXMap = new HashMap<>();
 			classTopXMap.put("stu_id", scoreStat.getStu_id());
 			classTopXMap.put("stu_name",
-					studentDao.queryById(scoreStat.getStu_id()).get(0)
+					studentDao.queryById(scoreStat.getStu_id())
 							.getName());
 			classTopXMap.put("total_score", scoreStat.getTatal_score());
 			classTopXMap.put("class_order", scoreStat.getClass_order());
@@ -120,7 +120,7 @@ public class ScoreAnalysisServiceImpl implements ScoreAnalysisService {
 			Map<String, Object> schoolTopXMap = new HashMap<>();
 			schoolTopXMap.put("stu_id", scoreStat.getStu_id());
 			schoolTopXMap.put("stu_name",
-					studentDao.queryById(scoreStat.getStu_id()).get(0)
+					studentDao.queryById(scoreStat.getStu_id())
 							.getName());
 			schoolTopXMap.put("total_score", scoreStat.getTatal_score());
 			schoolTopXMap.put("school_order", scoreStat.getSchool_order());
