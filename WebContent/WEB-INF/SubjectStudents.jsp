@@ -1,25 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/resources/util.css" rel="stylesheet" media="screen">
+<link href="/resources/temp.css" rel="stylesheet" media="screen">
 <div class="row" style="margin-right: 15px;">
 	<div class="col-md-12">
 		<div class="panel panel-default" style='border-right: 0;'>
 
 			<div class="panel-body" style='margin-right: -15px;'>
 
-				<span class="prompt_text">我的课程</span>
-				<div class="toolbg">
-					所有课程
-				</div>
 				<table
 					class="table table-condensed table-striped table-hover table-bordered"
 					id="tbmain">
 					<thead>
 						<tr>
-							<th>课程ID</th>
-							<th>课程名称</th>
-							<th>上课时间</th>
-							<th></th>
+							<th>学号</th>
+							<th>姓名</th>
+							<th>性别</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -27,16 +25,12 @@
 					<tr>
 						<td>${i.id }</td>
 						<td>${i.name }</td>
-						<td>${i.during }</td>
-						<td><a href="/subject/subjectStus?subjectId=${i.id }" target="_blank">查看选课学生</a></td>
+						<td>${i.sex }</td>
 					</tr>
 					</c:forEach>
 					</tbody>
 				</table>
 
-				<div class="toolbg">
-					所有课程
-				</div>
 
 			</div>
 		</div>

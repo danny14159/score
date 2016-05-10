@@ -6,14 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
+import shixi.bean.Student;
 import shixi.bean.Subject;
 import shixi.bean.User;
+import shixi.dao.StudentDao;
 import shixi.dao.SubjectDao;
 import shixi.dao.UserDao;
 import shixi.service.StudentService;
@@ -28,7 +32,8 @@ public class SubjectModule {
 	private SubjectService subjectServiceImpl;
 	@Inject
 	private StudentService studentServiceImpl;
-	
+	@Inject
+	private StudentDao studentDao;
 	@Inject
 	private SubjectDao subjectDao;
 
@@ -39,11 +44,23 @@ public class SubjectModule {
 		int uid = (int) session.getAttribute("uid");
 		request.setAttribute("list", subjectDao.dao().query(Subject.class, Cnd.where("teacher_id","=",uid)));
 	}
+	
+	@At("/subjectStus")
+	@Ok("jsp:SubjectStudents")
+	public void SubjectStudents(HttpServletRequest request,@Param("subjectId") String subjectId){
+		Sql sql = Sqls.create("select ts.id,ts.name,ts.sex from t_course_selecting tcs left join t_stu ts on ts.id=tcs.student_id where subject_id=@subject");
+		sql.params().set("subject", subjectId);
+		sql.setCallback(Sqls.callback.entities());
+		sql.setEntity(studentDao.getEntity());
+		studentDao.dao().execute(sql);
+		
+		request.setAttribute("list", sql.getList(Student.class));
+	}
 
 	@At("/")
 	@Ok("jsp:Subject")
 	public void toSubject(HttpServletRequest request,HttpSession session){
-		int uid = (int) session.getAttribute("uid");
+		//int uid = (int) session.getAttribute("uid");
 		int level = (int) session.getAttribute("level");
 		if(level == 4){
 			request.setAttribute("allteachers", userDao.dao().query(User.class, Cnd.where("level","=",4)));
