@@ -27,7 +27,7 @@
 					<tr>
 						<td>${i.id }</td>
 						<td>${i.name }</td>
-						<td>${i.during }</td>
+						<td>${i.weekday } ${i.part }</td>
 						<td><a href="/subject/subjectStus?subjectId=${i.id }" target="_blank">查看选课学生</a></td>
 					</tr>
 					</c:forEach>

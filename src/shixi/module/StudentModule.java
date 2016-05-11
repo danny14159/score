@@ -11,8 +11,11 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.web.ajax.Ajax;
 
 import shixi.bean.Student;
+import shixi.bean.Subject;
+import shixi.dao.StudentDao;
 import shixi.service.StudentService;
 
 @At("/student")
@@ -20,6 +23,8 @@ import shixi.service.StudentService;
 public class StudentModule {
 	@Inject
 	private StudentService studentServiceImpl;
+	@Inject
+	private StudentDao studentDao;
 
 	@At("/")
 	@Ok("jsp:Student")
@@ -70,10 +75,24 @@ public class StudentModule {
 	 */
 	@At("/selCourse")
 	@Ok("json")
-	public Object selCourse(HttpSession session, @Param("sid") Integer sid, @Param("cid") Integer cid) {
+	public Object selCourse(HttpSession session,  @Param("cid") Integer cid) {
 		int uid = (int) session.getAttribute("uid");
 		
-		return studentServiceImpl.selectCourse(uid, cid);
+		List<Subject> list = studentDao.findCoursesConflict(uid,cid);
+		if(list != null && !list.isEmpty()){
+			String msg = "";
+			for(Subject item:list){
+				msg += item.getName()+":"+item.getWeekday()+" "+item.getPart()+"，";
+			}
+			return Ajax.fail().setMsg("你要选的课程与以下课程上课时间冲突："+msg);
+		}
+		try{
+			studentServiceImpl.selectCourse(uid, cid);
+		}
+		catch(Exception exception){
+			return Ajax.fail().setMsg("抱歉，该课程已经选过了。");
+		}
+		return Ajax.ok().setMsg("选课成功，到“我的课程”查看");
 	}
 
 	/**

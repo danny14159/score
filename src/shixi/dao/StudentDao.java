@@ -169,6 +169,16 @@ public class StudentDao extends IdEntityService<Student> {
 		return 1;
 	}
 	
+	public List<Subject> findCoursesConflict(int studentId, int courseId){
+		Sql sql = Sqls.create("select * from t_course_selecting tcs inner join t_subject ts on ts.id=tcs.subject_id where tcs.student_id=@studentId and weekday=(select weekday from t_subject where id=@courseId) and part =(select part from t_subject where id=@courseId)");
+		sql.params().set("studentId", studentId);
+		sql.params().set("courseId", courseId);
+		sql.setCallback(Sqls.callback.entities());
+		sql.setEntity(dao().getEntity(Subject.class));
+		dao().execute(sql);
+		return sql.getList(Subject.class);
+	}
+	
 	public int deSelectCourse(int studentId, int courseId){
 		Sql sql = Sqls.create("delete from t_course_selecting where student_id=@sid and subject_id=@cid");
 		sql.params().set("sid", studentId);

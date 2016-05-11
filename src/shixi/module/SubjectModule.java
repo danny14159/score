@@ -62,7 +62,7 @@ public class SubjectModule {
 	public void toSubject(HttpServletRequest request,HttpSession session){
 		//int uid = (int) session.getAttribute("uid");
 		int level = (int) session.getAttribute("level");
-		if(level == 4){
+		if(level == 4 || level == 1){
 			request.setAttribute("allteachers", userDao.dao().query(User.class, Cnd.where("level","=",4)));
 		}
 		else if(level == 5){

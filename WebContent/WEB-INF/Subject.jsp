@@ -26,9 +26,12 @@
 				<tr>
 					<th width="10%">课程ID</th>
 					<th>课程名称</th>
-					<th width="16%">上课时间</th>
-					<th width="16%">任课老师</th>
-					<th width="25%">选项</th>
+					
+					<th>上课时间</th>
+					
+					<th>上课地点</th>
+					<th>任课老师</th>
+					<th	>选项</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -110,6 +113,29 @@ var on_modify=function(dom){
 		}
 	);
 };
+function genOptions(begin,end,unit,cls){
+	var sel = $('<select>').addClass(cls);
+	for (var i=begin;i<=end; i++){
+		sel.append($('<option>').val(i).html(i+unit));
+	}
+	return sel.get(0).outerHTML;
+}
+function get7days(){
+	var arr = ['日','一','二','三','四','五','六'];
+	var sel = $('<select>').addClass('week');
+	for(var i in arr){
+		sel.append($('<option>').html('周'+arr[i]));
+	}
+	return sel.get(0).outerHTML;
+}
+function getPart(){
+	return $('<select class="part">')
+	.append($('<option>').html('一二节'))
+	.append($('<option>').html('三四节'))
+	.append($('<option>').html('五六节'))
+	.append($('<option>').html('七八节'))
+	.append($('<option>').html('九十节')).get(0).outerHTML;
+}
 var on_add=function(dom){
 	window.utils.alert('请输入新课程信息','ERROR');
 	insertRecord(
@@ -121,8 +147,13 @@ var on_add=function(dom){
 						return [!value=="","课程名称不能为空！"];
 					}
 				},
-			'2':{'prop_name':'during'},
-			3:{
+			'2':{'prop_name':'during',inFormat:function(){
+				return get7days() + getPart();
+			},outFormat:function($td){
+				return [$td.find('.week').val(),$td.find('.part').val(),];
+			}},
+			3:{'prop_name':'location'},
+			4:{
 				'prop_name' : 'teacher_id',
 				'inFormat' : function() {
 					return $('#tplallteachers').html();
@@ -133,12 +164,30 @@ var on_add=function(dom){
 			}
 			/* '4':{'prop_name':'points'}, */
 		},
-		function(post_json){
-			$.post(ADD_PATH,post_json,function(){
+		function(json){
+			json.weekday=json.during[0];
+			json.part=json.during[1];
+			
+			/* if(!isLaterThan(json.end_hour,json.end_min,json.begin_hour,json.begin_min)){
+				delFirstRow($('#tbmain'));
+				alert('下课时间不能在上课时间之前');return;
+			} */
+			console.log(json)
+			 $.post(ADD_PATH,json,function(){
 				list();
 			});
 		}
 	);
+}
+
+function delFirstRow(table){
+	table.find("tbody tr:eq(0)").remove();
+}
+function isLaterThan(ah,am,bh,bm){
+	
+	if(ah>bh) return true;
+	if(ah == bh && am > bm) return true;
+	return false;
 }
 
 
@@ -147,7 +196,9 @@ var list=function(){
 	loadData(
 		$("#tbmain"),
 		{url:LIST_PATH},
-		['id','name','during','teacher_name',$(".btn-group").eq(0).prop('outerHTML')],
+		['id','name',function(data){
+			return data.weekday+' '+data.part;
+		},'location','teacher_name',$(".btn-group").eq(0).prop('outerHTML')],
 		function($table){
 			selectTr($table, 'red', null);
 		}
@@ -162,13 +213,8 @@ function on_select(dom){
 	$.post('/student/selCourse',{
 		cid:id
 	},function(data){
-		if(data){
-			alert('选课成功，到“我的课程”查看');
-		}
-		else{
-			alert('抱歉，该课程已经选过了。')
-		}
-	});
+		alert(data.msg)
+	},'json');
 }
 </script>
 </html>
