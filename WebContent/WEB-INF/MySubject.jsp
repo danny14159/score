@@ -19,6 +19,7 @@
 							<th>课程ID</th>
 							<th>课程名称</th>
 							<th>上课时间</th>
+							<th>上课地点</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -28,6 +29,7 @@
 						<td>${i.id }</td>
 						<td>${i.name }</td>
 						<td>${i.weekday } ${i.part }</td>
+						<td>${i.location }</td>
 						<td><a href="/subject/subjectStus?subjectId=${i.id }" target="_blank">查看选课学生</a></td>
 					</tr>
 					</c:forEach>

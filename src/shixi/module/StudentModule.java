@@ -121,4 +121,41 @@ public class StudentModule {
 
 		request.setAttribute("courses", studentServiceImpl.listCourses(uid));
 	}
+	
+	public Subject findBy(String week,String part,List<Subject> courses){
+		
+		for(Subject subject :courses){
+			if(subject.getWeekday().equals(week) && subject.getPart().equals(part)){
+				return subject;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 课程表页面
+	 */
+	@At("/coursesTable")
+	@Ok("jsp:courseTable")
+	public void coursesTable(HttpSession session, HttpServletRequest request){
+		int uid = (int) session.getAttribute("uid");
+		
+		List<Subject> courses = studentServiceImpl.listCourses(uid);
+		
+		String[] weekday = new String[]{"周日","周一","周二","周三","周四","周五","周六"};
+		String[] part = new String[]{"一二节","三四节","五六节","七八节"};
+		Subject[][] subs = new Subject[4][7];
+		
+		for(int i = 0;i<4;i++){
+			for(int j = 0;j<7;j++){
+				
+				subs[i][j] = findBy(weekday[j],part[i],courses);
+			}
+				
+		}
+		
+		request.setAttribute("subs", subs);
+		request.setAttribute("part", part);
+	}
 }

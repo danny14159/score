@@ -13,6 +13,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.web.ajax.Ajax;
 
 import shixi.bean.Student;
 import shixi.bean.Subject;
@@ -48,7 +49,7 @@ public class SubjectModule {
 	@At("/subjectStus")
 	@Ok("jsp:SubjectStudents")
 	public void SubjectStudents(HttpServletRequest request,@Param("subjectId") String subjectId){
-		Sql sql = Sqls.create("select ts.id,ts.name,ts.sex from t_course_selecting tcs left join t_stu ts on ts.id=tcs.student_id where subject_id=@subject");
+		Sql sql = Sqls.create("select ts.id,ts.name,ts.sex,ts.location,ts.address,ts.enterYear from t_course_selecting tcs left join t_stu ts on ts.id=tcs.student_id where subject_id=@subject");
 		sql.params().set("subject", subjectId);
 		sql.setCallback(Sqls.callback.entities());
 		sql.setEntity(studentDao.getEntity());
@@ -71,8 +72,15 @@ public class SubjectModule {
 		}
 	}
 	@At("/add")
-	public void add(@Param("..")Subject sub) {
-		subjectServiceImpl.add(sub);
+	@Ok("json")
+	public Object add(@Param("..")Subject sub) {
+		
+		int num = subjectDao.dao().count(Subject.class, Cnd.where("teacher_id", "=", sub.getTeacher_id()).and("weekday","=",sub.getWeekday()).and("part","=",sub.getPart()));
+		if(num == 0){
+			subjectServiceImpl.add(sub);
+			return Ajax.ok();
+		}
+		return Ajax.fail();
 	}
 
 	@At("/delete")

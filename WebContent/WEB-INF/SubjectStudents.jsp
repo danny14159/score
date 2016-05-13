@@ -9,7 +9,10 @@
 		<div class="panel panel-default" style='border-right: 0;'>
 
 			<div class="panel-body" style='margin-right: -15px;'>
-
+	
+	<div class="toolbg">
+				<span class="prompt_text">选课学生</span>
+		</div>
 				<table
 					class="table table-condensed table-striped table-hover table-bordered"
 					id="tbmain">
@@ -18,6 +21,9 @@
 							<th>学号</th>
 							<th>姓名</th>
 							<th>性别</th>
+							<th>籍贯</th>
+							<th>家庭住址</th>
+							<th>入学年份</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -26,11 +32,15 @@
 						<td>${i.id }</td>
 						<td>${i.name }</td>
 						<td>${i.sex }</td>
+						<td>${i.location }</td>
+						<td>${i.address }</td>
+						<td>${i.enterYear }</td>
 					</tr>
 					</c:forEach>
 					</tbody>
 				</table>
-
+	<div class="toolbg">
+		</div>
 
 			</div>
 		</div>

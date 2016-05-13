@@ -48,11 +48,11 @@
 					</c:if>
 					<c:if test="${level eq 4 }">
 						<li class="menuItem"><span data-index="1" data-url="subject/mine">我的课程</span></li>
-						<li class="menuItem"><span data-index="2" data-url="student">学生管理</span></li>
 					</c:if>
 					<c:if test="${level eq 5 }">
 						<li class="menuItem"><span data-index="1" data-url="subject">开设课程</span></li>
 						<li class="menuItem"><span data-index="1" data-url="student/listCourses">我的课程</span></li>
+						<li class="menuItem"><span data-index="1" data-url="student/coursesTable">查看课表</span></li>
 					</c:if>
 					<!-- <li class="menuItem"><span data-index="2" data-url="student">学生管理</span></li> -->
 					<!-- <li class="menuItem"><span data-index="3" data-url="test">考试管理</span></li> -->
@@ -73,15 +73,16 @@
 				<div id="ajaxData">
 					<!-- ajaxData里包裹原始内容，即首页内容 -->
 					<div id="home">
-					<h1><span id="time"></span>好，<%=session.getAttribute("username") %></h1>
+					<h1><span id="time"></span>好，${username }</h1>
 					<hr/>
-					<span class="blue">学生：</span>
+					<span class="blue">欢迎使用选课系统！</span>
+					<!-- <span class="blue">学生：</span>
 					<span id="nClass">
 						
 					</span>
 					个班，共<span id="nStudent">
 						
-					</span>名学生
+					</span>名学生 -->
 					<div class="content" style="width:67%;margin-left:0;height:210px;display: none;">
 						<div class="contentTitle">快捷入口</div>
 						<div class="contentBody">
@@ -298,13 +299,13 @@
 			else if(i == 4) $('#menu>li>ul>li:eq(0)').click();
 		});
 		
-		$.get('class/query',function(data){
+		/* $.get('class/query',function(data){
 			$('#nClass').text(data.length);
 		},'json');
 		
 		$.get('student/query',function(data){
 			$('#nStudent').text(100);
-		},'json');
+		},'json'); */
 	});
 	var loadPage = function(url, dst_id) {
 		

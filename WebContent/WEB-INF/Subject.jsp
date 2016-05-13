@@ -173,9 +173,15 @@ var on_add=function(dom){
 				alert('下课时间不能在上课时间之前');return;
 			} */
 			console.log(json)
-			 $.post(ADD_PATH,json,function(){
-				list();
-			});
+			 $.post(ADD_PATH,json,function(data){
+				if(data.ok){
+					list();
+				}
+				else{
+					delFirstRow($('#tbmain'));
+					alert(json.weekday+json.part+'该老师有课，请重新安排。');
+				}
+			},'json');
 		}
 	);
 }
