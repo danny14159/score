@@ -4,7 +4,9 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<span class="prompt_text">我的课程表</span>
-		<div class="toolbg"></div>
+		<div class="toolbg">
+			<span>&nbsp;</span><a id="" class="btn btn-default btn-xs" href="/writeExcel/getCoursesTableExcel">导出课表</a>
+		</div>
 		<table
 			class="table table-condensed table-striped table-hover table-bordered" id="tbmain">
 			<thead>

@@ -150,9 +150,12 @@ public class ExcelSave {
 			// 成绩处理
 			Student student = new Student();
 			student.setAt_class(class_id);
-			student.setName(String.valueOf(getCellString(row.getCell(0))));
-			student.setSex(String.valueOf(this.getCellString(row.getCell(1)))
+			student.setName(String.valueOf(getCellString(row.getCell(1))));
+			student.setSex(String.valueOf(this.getCellString(row.getCell(2)))
 					.charAt(0));
+			student.setLocation(getCellString(row.getCell(3))+"");
+			student.setAddress(getCellString(row.getCell(4))+"");
+			student.setEnterYear(Integer.parseInt(getCellString(row.getCell(5))+""));
 			list.add(student);
 		}
 		studentDao.batch(list);

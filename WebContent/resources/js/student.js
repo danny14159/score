@@ -3,7 +3,7 @@
  */
 
 var exportFile=function(){
-	window.location=getUrl('writeExcel','getStudentExcel')+"?class_id="+$('#at_class').val()+'&studentItem=[\'学号\',\'姓名\',\'性别\']';
+	window.location=getUrl('writeExcel','getStudentExcel')+"?class_id="+$('#at_class').val()+'&studentItem=[\'学号\',\'姓名\',\'性别\',\'籍贯\',\'家庭住址\',\'入学年份\']';
 };
 
 var importXls=function(){

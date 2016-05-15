@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -33,11 +35,16 @@ import shixi.dao.StudentDao;
 import shixi.dao.SubjectDao;
 import shixi.dao.TestDao;
 import shixi.bean.Class;
+import shixi.bean.Student;
+import shixi.bean.Subject;
 import shixi.service.ScoreAnalysisService;
+import shixi.service.StudentService;
 
 @IocBean
 @At("/writeExcel")
 public class WriteExcel {
+	@Inject
+	private StudentService studentServiceImpl;
 	@Inject
 	private StudentDao studentDao;
 	@Inject
@@ -68,8 +75,10 @@ public class WriteExcel {
 	 */
 	@At("/getStudentExcel")
 	@Ok("raw")
-	public File getStudentExcel(@Param("class_id") Integer class_id,
-			@Param("studentItem") String[] studentItem) throws IOException {
+	public File getStudentExcel(@Param("class_id") Integer class_id
+			) throws IOException {
+		
+		String[] studentItem = new String[]{"学号","姓名","性别","籍贯","家庭住址","入学年份"};
 		String fileName = null;
 		fileName = classDao.fetch(class_id).getName() + "学生信息" + ".xls";
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -84,32 +93,86 @@ public class WriteExcel {
 			cell.setCellValue(studentItem[i]);
 		}
 		for (int x = 0; x < studentDao.queryByClass(class_id).size(); x++) {
-
+			Student stu = studentDao.queryByClass(class_id).get(x);
+			
+			String[] values = new String[studentItem.length];
+			values[0] = stu.getId()+"";
+			values[1] = stu.getName();
+			values[2] = stu.getSex()+"";
+			values[3] = stu.getLocation();
+			values[4] = stu.getAddress();
+			values[5] = stu.getEnterYear()+"";
+			
 			row = sheet.createRow(x + 1);
 
-			HSSFCell cell0 = row.createCell(0);
-			cell0.setCellStyle(cell_Style);
-			cell0.setCellValue(studentDao.queryByClass(class_id).get(x).getId());
-			HSSFCell cell1 = row.createCell(1);
-			cell1.setCellStyle(cell_Style);
-			cell1.setCellValue(studentDao.queryByClass(class_id).get(x)
-					.getName());
-			String sex = null;
-
-			HSSFCell cell2 = row.createCell(2);
-			cell2.setCellStyle(cell_Style);
-			if ("男".equals(String.valueOf(studentDao.queryByClass(class_id)
-					.get(x).getSex()))) {
-				sex = "男";
-
-				cell2.setCellValue(sex);
-			} else {
-				sex = "女";
-				cell2.setCellValue(sex);
+			for(int i = 0;i<studentItem.length;i++){
+				
+				HSSFCell _cell0 = row.createCell(i);
+				_cell0.setCellStyle(cell_Style);
+				_cell0.setCellValue(values[i]);
+				
 			}
 
 		}
 		File excelfile = Files.createFileIfNoExists(fileName);
+		FileOutputStream fileout = new FileOutputStream(excelfile);
+
+		try {
+			fileout.flush();
+			workbook.write(fileout);
+
+			fileout.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Output   is   closed ");
+		}
+		return excelfile;
+	}
+	
+	public String findBy(String week,String part,List<Subject> courses){
+		
+		for(Subject subject :courses){
+			if(subject.getWeekday().equals(week) && subject.getPart().equals(part)){
+				return subject.getName()+","+subject.getLocation()+","+subject.getTeacher_name();
+			}
+		}
+		
+		return null;
+	}
+	
+	@At("/getCoursesTableExcel")
+	@Ok("raw")
+	public File getCoursesTableExcel(HttpSession session) throws IOException {
+		int uid = (int) session.getAttribute("uid");
+		
+		List<Subject> courses = studentServiceImpl.listCourses(uid);
+		
+		String[] weekday = new String[]{"周日","周一","周二","周三","周四","周五","周六"};
+		String[] part = new String[]{"一二节","三四节","五六节","七八节"};
+		Subject[][] subs = new Subject[4][7];
+		
+		
+		HSSFWorkbook workbook = new HSSFWorkbook();
+
+		HSSFSheet sheet = workbook.createSheet("表一");
+		
+		HSSFRow row = sheet.createRow(0);//创建第一行
+		for(int i = 0;i<weekday.length;i++){
+			
+			HSSFCell cell = row.createCell(i+1);
+			cell.setCellValue(weekday[i]);
+		}
+		
+		for(int i = 0;i<4;i++){
+			HSSFRow _row = sheet.createRow(i+1);
+			_row.createCell(0).setCellValue(part[i]);;
+			for(int j = 0;j<7;j++){
+				HSSFCell _cell = _row.createCell(j+1);
+				_cell.setCellValue( findBy(weekday[j],part[i],courses));
+			}
+				
+		}
+		File excelfile = Files.createFileIfNoExists("课程表.xls");
 		FileOutputStream fileout = new FileOutputStream(excelfile);
 
 		try {
