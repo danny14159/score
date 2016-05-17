@@ -15,6 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Param;
@@ -149,17 +150,37 @@ public class ExcelSave {
 			HSSFRow row = sheet.getRow(rowIndex);
 			// 成绩处理
 			Student student = new Student();
+			student.setId( getCellInteger(row.getCell(0))      );
 			student.setAt_class(class_id);
 			student.setName(String.valueOf(getCellString(row.getCell(1))));
 			student.setSex(String.valueOf(this.getCellString(row.getCell(2)))
 					.charAt(0));
 			student.setLocation(getCellString(row.getCell(3))+"");
 			student.setAddress(getCellString(row.getCell(4))+"");
-			student.setEnterYear(Integer.parseInt(getCellString(row.getCell(5))+""));
-			list.add(student);
+			student.setEnterYear(getCellInteger(row.getCell(5)));
+			
+			if(Strings.isNotBlank(student.getName()) && !"null".equals(student.getName())){
+				list.add(student);
+			}
 		}
 		studentDao.batch(list);
 		return list;
+	}
+	
+	public Integer getCellInteger(HSSFCell cell){
+		Object str = getCellString(cell);
+		try{
+			if(str instanceof Double){
+				double dbValue = ((double)str);
+				int intValue = (int)dbValue;
+				return intValue;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	/**
