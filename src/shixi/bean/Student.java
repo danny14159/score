@@ -37,6 +37,16 @@ public class Student {
 	
 	@ManyMany(target=Subject.class,relation="t_course_selecting" ,from="student_id",to="subject_id")
 	private List<Subject> subjects;
+	
+	private String className;
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
 	public List<Subject> getSubjects() {
 		return subjects;

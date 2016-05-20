@@ -18,6 +18,7 @@ import org.nutz.web.ajax.Ajax;
 import shixi.bean.Student;
 import shixi.bean.Subject;
 import shixi.bean.User;
+import shixi.dao.ClassDao;
 import shixi.dao.StudentDao;
 import shixi.dao.SubjectDao;
 import shixi.dao.UserDao;
@@ -29,6 +30,8 @@ import shixi.service.SubjectService;
 public class SubjectModule {
 	@Inject
 	private UserDao userDao;
+	@Inject
+	private ClassDao classDao;
 	@Inject
 	private SubjectService subjectServiceImpl;
 	@Inject
@@ -49,13 +52,21 @@ public class SubjectModule {
 	@At("/subjectStus")
 	@Ok("jsp:SubjectStudents")
 	public void SubjectStudents(HttpServletRequest request,@Param("subjectId") String subjectId){
-		Sql sql = Sqls.create("select ts.id,ts.name,ts.sex,ts.location,ts.address,ts.enterYear from t_course_selecting tcs left join t_stu ts on ts.id=tcs.student_id where subject_id=@subject");
+		Sql sql = Sqls.create("select ts.id,ts.name,ts.sex,ts.location,ts.address,ts.enterYear,tc.name as className,ts.at_class "
+				+ "from t_course_selecting tcs "
+				+ "left join t_stu ts on ts.id=tcs.student_id "
+				+ "left join t_class tc on tc.id=ts.at_class "
+				+ "where subject_id=@subject");
 		sql.params().set("subject", subjectId);
 		sql.setCallback(Sqls.callback.entities());
 		sql.setEntity(studentDao.getEntity());
 		studentDao.dao().execute(sql);
 		
-		request.setAttribute("list", sql.getList(Student.class));
+		List<Student> list = sql.getList(Student.class);
+		for(Student item:list){
+			item.setClassName(classDao.fetch(Cnd.where("id", "=", item.getAt_class())).getName());
+		}
+		request.setAttribute("list",list );
 	}
 
 	@At("/")

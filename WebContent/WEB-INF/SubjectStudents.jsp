@@ -20,6 +20,7 @@
 						<tr>
 							<th>学号</th>
 							<th>姓名</th>
+							<th>班级</th>
 							<th>性别</th>
 							<th>籍贯</th>
 							<th>家庭住址</th>
@@ -31,6 +32,7 @@
 					<tr>
 						<td>${i.id }</td>
 						<td>${i.name }</td>
+						<td>${i.className }</td>
 						<td>${i.sex }</td>
 						<td>${i.location }</td>
 						<td>${i.address }</td>
