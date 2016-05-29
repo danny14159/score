@@ -138,10 +138,16 @@ public class StudentModule {
 	 */
 	@At("/coursesTable")
 	@Ok("jsp:courseTable")
-	public void coursesTable(HttpSession session, HttpServletRequest request){
+	public void coursesTable(HttpSession session, HttpServletRequest request,boolean t){
 		int uid = (int) session.getAttribute("uid");
 		
-		List<Subject> courses = studentServiceImpl.listCourses(uid);
+		List<Subject> courses = null;
+		if(!t){
+			courses = studentServiceImpl.listCourses(uid);
+		}
+		else{
+			courses = studentDao.listTeacherCourses(uid);
+		}
 		
 		String[] weekday = new String[]{"周日","周一","周二","周三","周四","周五","周六"};
 		String[] part = new String[]{"一二节","三四节","五六节","七八节"};
@@ -157,5 +163,6 @@ public class StudentModule {
 		
 		request.setAttribute("subs", subs);
 		request.setAttribute("part", part);
+		request.setAttribute("t", t);
 	}
 }

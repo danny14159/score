@@ -9,6 +9,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.service.IdEntityService;
 
@@ -17,6 +18,9 @@ import shixi.bean.Subject;
 
 @IocBean(fields = { "dao" })
 public class StudentDao extends IdEntityService<Student> {
+	
+	@Inject
+	private SubjectDao subjectDao;
 	/**
 	 * 插入一条记录
 	 * 
@@ -196,5 +200,10 @@ public class StudentDao extends IdEntityService<Student> {
 		Student s = (Student) queryById(stuId);
 		
 		return dao().fetchLinks(s, "subjects").getSubjects();
+	}
+	
+	public List<Subject> listTeacherCourses(int userId){
+		
+		return subjectDao.dao().query(Subject.class, Cnd.where("teacher_id", "=", userId));
 	}
 }

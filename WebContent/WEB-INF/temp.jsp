@@ -48,6 +48,7 @@
 					</c:if>
 					<c:if test="${level eq 4 }">
 						<li class="menuItem"><span data-index="1" data-url="subject/mine">我的课程</span></li>
+						<li class="menuItem"><span data-index="1" data-url="student/coursesTable?t=true">查看看表</span></li>
 					</c:if>
 					<c:if test="${level eq 5 }">
 						<li class="menuItem"><span data-index="1" data-url="subject">开设课程</span></li>
