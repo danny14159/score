@@ -164,6 +164,11 @@ public class StudentDao extends IdEntityService<Student> {
 		return dao().query(Student.class, null);
 	}
 	
+	/**选课
+	 * @param studentId
+	 * @param courseId
+	 * @return
+	 */
 	public int selectCourse(int studentId, int courseId){
 		Sql sql = Sqls.create("insert into t_course_selecting values(@sid,@cid)");
 		sql.params().set("sid", studentId);
@@ -173,6 +178,11 @@ public class StudentDao extends IdEntityService<Student> {
 		return 1;
 	}
 	
+	/**查找课程冲突
+	 * @param studentId
+	 * @param courseId
+	 * @return
+	 */
 	public List<Subject> findCoursesConflict(int studentId, int courseId){
 		Sql sql = Sqls.create("select * from t_course_selecting tcs inner join t_subject ts on ts.id=tcs.subject_id where tcs.student_id=@studentId and weekday=(select weekday from t_subject where id=@courseId) and part =(select part from t_subject where id=@courseId)");
 		sql.params().set("studentId", studentId);
@@ -183,6 +193,11 @@ public class StudentDao extends IdEntityService<Student> {
 		return sql.getList(Subject.class);
 	}
 	
+	/**取消选课
+	 * @param studentId
+	 * @param courseId
+	 * @return
+	 */
 	public int deSelectCourse(int studentId, int courseId){
 		Sql sql = Sqls.create("delete from t_course_selecting where student_id=@sid and subject_id=@cid");
 		sql.params().set("sid", studentId);
@@ -202,6 +217,10 @@ public class StudentDao extends IdEntityService<Student> {
 		return dao().fetchLinks(s, "subjects").getSubjects();
 	}
 	
+	/**查询老师的课表信息
+	 * @param userId
+	 * @return
+	 */
 	public List<Subject> listTeacherCourses(int userId){
 		
 		return subjectDao.dao().query(Subject.class, Cnd.where("teacher_id", "=", userId));
